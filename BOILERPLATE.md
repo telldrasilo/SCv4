@@ -4,22 +4,22 @@
 
 | Элемент | Зачем |
 |--------|--------|
-| Vite + Tailwind 4 + тема как в `globals.css` | Быстрый dev, те же семантические классы, что в игре |
-| `index.html` с оболочкой игры | Не строить layout с нуля |
-| `src/theme-root.css`, `main.css` | Токены и `@theme` — копировать паттерны в Next |
+| Next.js 16 + Tailwind 4 + тема как в `globals.css` | Тот же стек, что у основного приложения; dev/build как в монорепо |
+| `app/page.tsx` + `components/skin-shell.tsx` | Оболочка игры без дублирования с основным `GameLayout` |
+| `src/theme-root.css`, `app/globals.css` | Токены и `@theme` — те же паттерны, что в `src/app/globals.css` |
 | `src/utilities.css`, `animations.css` | Общие утилиты и анимации из приложения |
 | `src/experiments/` | Изолированные CSS/TS без смешения с базой |
 | `public/` | Картинки и файлы по URL `/…` |
 | `IDEA_TEMPLATE.md` | Оформить идею до кода |
 | `MODULE_STARTER.md` | Чеклист переноса в монорепозиторий |
 | `.editorconfig` | Единый стиль отступов |
-| `npm run typecheck` | Проверка `main.ts` и будущих скриптов |
+| `npm run typecheck` | Проверка `app/`, `components/` и скриптов |
 
 ## Опционально (по мере необходимости)
 
 - **Prettier** — запускать из корня репозитория (`npm run format`) или добавить `prettier` в `docs/skin/package.json`, если папка живёт отдельно.
 - **Vitest в этой папке** — обычно избыточен: юнит-тесты логики лучше в корне (`src/**/*.test.ts`).
-- **Отдельная HTML-страница** — второй вход в `vite.config` (`build.rollupOptions.input`) для полноэкранного прототипа без оболочки.
+- **Отдельная страница без оболочки** — новый маршрут `app/…/page.tsx` без `SkinShell` или отдельный layout.
 - **Копия `.prettierrc`** из корня — если проект выносится в отдельный репозиторий.
 
 ## Минимальный цикл «идея → код в игре»

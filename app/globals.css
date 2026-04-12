@@ -1,17 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "./theme-root.css";
-@import "./utilities.css";
-@import "./animations.css";
+@import "../src/theme-root.css";
+@import "../src/utilities.css";
+@import "../src/animations.css";
 
 @custom-variant dark (&:is(.dark *));
 
-/* Сканирование классов в корневом index.html заготовки */
-@source "../index.html";
+@source "./**/*.{tsx,ts,jsx,js}";
+@source "../src/**/*.{ts,tsx}";
 
 /**
  * Карта темы как в src/app/globals.css @theme inline.
- * Шрифты: в приложении Geist через next/font; здесь системный стек для автономности.
+ * В этой заготовке шрифт — системный стек; при желании подключите Geist как в корневом app/layout.tsx.
  */
 @theme inline {
   --color-background: var(--background);

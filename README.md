@@ -1,6 +1,8 @@
 # SwordCraft — заготовка UI (`docs/skin`)
 
-Мини-проект на **Vite + Tailwind CSS v4**: те же семантические токены (`bg-background`, `text-primary`, `border-border`, …), что в `src/app/globals.css`, плюс палитры **Tailwind** для вёрстки как в `game-layout` (`from-stone-950`, `text-amber-200`, `border-stone-700/50`, …). Статическая оболочка совпадает по структуре с игрой.
+Отдельное мини-приложение на **Next.js 16 + Tailwind CSS v4** (тот же стек, что у корня репозитория): семантические токены (`bg-background`, `text-primary`, …) из `@theme`, палитры **Tailwind** для вёрстки как в `game-layout` (`from-stone-950`, `text-amber-200`, …). Оболочка вынесена в `components/skin-shell.tsx`.
+
+Раньше здесь стоял **Vite** как самый короткий путь к статическому HTML без React. Для прототипов, которые потом переносятся в основное приложение, удобнее **тот же Next.js + React**, без второго стека.
 
 ## Быстрый старт
 
@@ -10,11 +12,13 @@ npm install
 npm run dev
 ```
 
-Порт задаётся в `vite.config.ts` (сейчас **3010**): [http://localhost:3010](http://localhost:3010). Сборка статики:
+Порт **3010** задан в скрипте `dev` в `package.json`: [http://localhost:3010](http://localhost:3010).
+
+Продакшен-сборка этой папки:
 
 ```bash
 npm run build
-npm run preview   # проверка dist/
+npm run start
 ```
 
 Папку `docs/skin` можно копировать отдельно; достаточно `npm install` внутри неё.
@@ -23,50 +27,45 @@ npm run preview   # проверка dist/
 
 | Слой | В этой папке | В основном проекте |
 |------|----------------|---------------------|
-| Сборка / dev | **Vite** 6 | **Next.js** 16 |
-| Стили | **Tailwind CSS** 4, **tw-animate-css**, PostCSS | То же + `src/app/globals.css` |
-| UI | Чистый HTML + классы Tailwind | **React** 19, **shadcn/ui** (Radix) |
+| Фреймворк | **Next.js** 16 (App Router) | То же |
+| Стили | **Tailwind CSS** 4, **tw-animate-css**, PostCSS | То же + полный `src/app/globals.css` |
+| UI | **React** 19, разметка в `components/` | **React** + **shadcn/ui** (Radix) |
 | Состояние | — | **Zustand** 5 |
-| Сборка приложения | — | `next build` |
 
-Полный список зависимостей монорепозитория: корневой `package.json`. Навигация по документации: [`docs/README.md`](../README.md), для агентов — [`AGENTS.md`](../../AGENTS.md).
+Полный список зависимостей монорепозитория: корневой `package.json`. Документация: [`docs/README.md`](../README.md), [`AGENTS.md`](../../AGENTS.md).
 
 ## Файлы
 
 | Путь | Назначение |
 |------|------------|
-| `package.json` | Скрипты `dev`, `build`, `preview`; devDependencies |
-| `vite.config.ts` | Корень проекта — папка `docs/skin`, выход `dist/` |
+| `package.json` | `next dev/build/start`, порт 3010 |
+| `next.config.ts` | Минимальная конфигурация Next |
 | `postcss.config.mjs` | `@tailwindcss/postcss` |
-| `index.html` | Оболочка; классы Tailwind вместо захардкоженных hex |
-| `src/main.ts` | Точка входа: импорт `main.css` |
-| `src/main.css` | `@import "tailwindcss"`, `@theme inline` (как в `globals.css`), `@source` для `index.html`, `@layer base`, глобальные скроллбары |
-| `src/theme-root.css` | `:root` и `.light` — значения `--background`, `--primary`, medieval-цвета и т.д. (копия логики из `globals.css`) |
-| `src/utilities.css` | Классы `scrollbar-medieval`, `glow-gold`, `text-glow`, `card-medieval`, `resource-icon` |
-| `src/animations.css` | `@keyframes` и `.animate-*`, `.altar-construction-fill` |
-| `src/experiments/` | Черновики стилей/скриптов (см. README внутри) |
-| `public/` | Статические файлы прототипа (`/file.png`) |
+| `app/layout.tsx`, `app/page.tsx` | Корневой layout и страница |
+| `app/globals.css` | Tailwind, `@theme`, импорт `src/theme-root.css`, utilities, animations, скроллбары |
+| `components/skin-shell.tsx` | Оболочка (сайдбар, статусбар, кузница, док) |
+| `src/theme-root.css` | `:root` / `.light` — значения токенов |
+| `src/utilities.css`, `src/animations.css` | Как в прежней заготовке |
+| `src/experiments/` | Черновики CSS (подключение в `app/layout.tsx`) |
+| `public/` | Статика `/…` |
 | `IDEA_TEMPLATE.md`, `BOILERPLATE.md` | Шаблон идеи и обзор болванки |
 
-Источник правды по токенам в приложении: **`src/app/globals.css`**. После изменения темы в репозитории сверьте `theme-root.css` и блок `@theme` в `main.css`.
+Источник правды по теме в игре: **`src/app/globals.css`**. После смены темы сверьте `theme-root.css` и `@theme` в `app/globals.css`.
 
 ## Как стилировать модули
 
-1. **Семантика темы** — `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-card`, `text-primary`, `bg-primary`, `text-gold`, `text-mana` и т.д. (как в shadcn + ваши `--color-*` в `@theme`).
-2. **Layout как в игре** — утилиты Tailwind **`stone-*`**, **`amber-*`**, градиенты `bg-gradient-to-b from-stone-900 to-stone-950`, прозрачность `border-stone-700/50`.
-3. **Кастомные утилиты** из игры — классы `glow-gold`, `scrollbar-medieval`, `animate-pulse-gold` и др. (см. `src/utilities.css`, `src/animations.css`).
+1. **Семантика** — `bg-background`, `text-muted-foreground`, `border-border`, `text-primary`, …
+2. **Layout как в игре** — `stone-*`, `amber-*`, градиенты и прозрачность как в `game-layout.tsx`.
+3. **Утилиты игры** — `glow-gold`, `scrollbar-medieval`, классы из `src/utilities.css` / `animations.css`.
 
-Шрифт в Next.js — **Geist** (`next/font`). В заготовке используется системный стек из `@theme` в `main.css`.
+При желании подключите **Geist** в `app/layout.tsx` так же, как в корневом `src/app/layout.tsx`.
 
-## Болванка для любой отдельной идеи
+## Болванка для идей
 
-- [`BOILERPLATE.md`](./BOILERPLATE.md) — что уже есть в папке и что можно добавить опционально.
-- [`IDEA_TEMPLATE.md`](./IDEA_TEMPLATE.md) — шаблон описания идеи до переноса в код.
-- [`src/experiments/README.md`](./src/experiments/README.md) — как подключать свои CSS/TS без ломки базы.
-- **`public/`** — статика для макетов (пути с корня `/…`).
+- [`BOILERPLATE.md`](./BOILERPLATE.md), [`IDEA_TEMPLATE.md`](./IDEA_TEMPLATE.md), [`src/experiments/README.md`](./src/experiments/README.md), **`public/`**
 
 ## Прочее
 
-- [`MODULE_STARTER.md`](./MODULE_STARTER.md) — перенос модуля в приложение.
-- `npm run typecheck` — проверка TypeScript в этой папке.
-- `dist/` в `.gitignore`; при необходимости коммитьте только исходники.
+- [`MODULE_STARTER.md`](./MODULE_STARTER.md) — перенос в монорепозиторий.
+- `npm run typecheck` — `tsc --noEmit`.
+- В `.gitignore`: `.next/`, `out/`, `node_modules/`.

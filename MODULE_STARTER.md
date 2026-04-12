@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Вёрстка в `index.html` использует **Tailwind** (классы `stone-*`, `amber-*`, семантические `bg-background`, `text-primary`, …). Переносите те же классы в `className` в React.
+Вёрстка в `components/skin-shell.tsx` использует **Tailwind** (классы `stone-*`, `amber-*`, семантические `bg-background`, `text-primary`, …). В основном приложении переносите в свои компоненты и `className` 1:1.
 
 Описание идеи до кода: [`IDEA_TEMPLATE.md`](./IDEA_TEMPLATE.md). Обзор возможностей болванки: [`BOILERPLATE.md`](./BOILERPLATE.md).
 

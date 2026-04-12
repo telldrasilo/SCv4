@@ -5,20 +5,20 @@
 ## Стили
 
 1. Создайте файл, например `my-feature.css`.
-2. Подключите в `src/main.ts` **после** `main.css`, чтобы можно было переопределять при необходимости:
+2. Подключите в `app/layout.tsx` **после** `./globals.css`:
 
-```ts
-import './main.css'
-import './experiments/my-feature.css'
+```tsx
+import './globals.css'
+import '../src/experiments/my-feature.css'
 ```
 
 3. В `my-feature.css` используйте те же токены (`var(--primary)`), утилиты Tailwind через `@apply` в `@layer components` при желании, или чистый CSS.
 
 ## Разметка
 
-- Быстрый путь: замените содержимое `#module-root` в корневом `index.html`.
-- Если нужна **отдельная страница** — добавьте второй `*.html` в корень `docs/skin` и пропишите его в `vite.config.ts` (`build.rollupOptions.input`) или используйте отдельный Vite-проект.
+- Быстрый путь: правьте содержимое `#module-root` в `components/skin-shell.tsx` (или подключите свой компонент из `app/page.tsx`).
+- Если нужна **отдельная страница** — добавьте маршрут в `app/…/page.tsx` (например `app/prototype/page.tsx`).
 
 ## Скрипты
 
-Добавьте `src/experiments/my-feature.ts` и импорт в `main.ts`. Логику держите чистой; при переносе в игру — переписать на React и store.
+Добавьте `src/experiments/my-feature.ts` и импорт в `app/layout.tsx` или в страницу/компонент. Логику держите чистой; при переносе в игру — переписать на React и store.

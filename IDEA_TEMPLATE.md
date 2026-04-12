@@ -24,7 +24,7 @@
 
 ## В этой папке (skin)
 
-- Разметка: блок `#module-root` в `index.html` или отдельный CSS в `src/experiments/`
+- Разметка: блок `#module-root` в `components/skin-shell.tsx` (или свой `page.tsx`) и при необходимости CSS в `src/experiments/`
 - Статика: `public/` (картинки, шрифты для макета)
 
 ## Критерий «готово» для переноса в репозиторий
