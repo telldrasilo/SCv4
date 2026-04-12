@@ -1,12 +1,31 @@
-# Worklog
+# Worklog — SwordCraft Idle Forge
 
-**Skin is a standalone project.** Treat the `docs/skin` directory as its own codebase: this worklog, rules, and archive apply **only here**, not to the wider SwordCraft tree.
+This file is the single source of truth for **what is happening now**.
+Agents **must** read this before starting any task and **must** append a record when a task is finished.
+
+---
 
 ## What belongs here
 
 - **Only the current to-do** and short working notes.
-- When an item is **done**, move a brief record to **`archive/`** at the project root, with a **numbered filename** (e.g. `01-topic.md`, `02-topic.md`, in order of creation). Remove the item from this file.
+- **Only the latest work record** stays in the `Work records` section below. All older records are moved to **`archive/`** (numbered filenames: `01-topic.md`, `02-topic.md`, …).
+- When a new task is completed: archive the **previous** work record to `archive/`, then write the **new** record here.
 - Keep **worklog** small; long specs live in other project docs (`README.md`, `BOILERPLATE.md`, …) or under `archive/`.
+
+---
+
+## Current state
+
+| Item | Value |
+|------|-------|
+| Stack | Next.js 16 + React 19 + Tailwind CSS 4 + TypeScript |
+| Theme | Dark medieval (`theme-root.css`, `globals.css`) |
+| Layout | `SkinShell` component (sidebar, statusbar, forge, dock) |
+| State mgmt | Zustand 5 (`src/lib/game-store.ts`) — resources, blacksmith, forge |
+| Tests | Vitest 4 — 29 tests passing (`npm test`) |
+| Dev port | 3000 |
+
+---
 
 ## Development rules
 
@@ -38,6 +57,60 @@
 
 ---
 
+## Agent protocol
+
+Every agent (main or sub) working on this project **must**:
+
+1. **Read** this file before starting.
+2. **Append** a work record when a task is finished.
+3. **Before appending**, move the previous work record to `archive/` (next numbered filename). The `Work records` section must always contain **only the latest** completed task.
+
+Record format:
+
+```markdown
+---
+Task ID: <id>
+Agent: <agent name>
+Task: <what was requested>
+
+Work Log:
+- <step 1>
+- <step 2>
+
+Stage Summary:
+- <key results / decisions / artifacts>
+```
+
+---
+
 ## To-do
 
 <!-- On completion: add archive/NN-topic.md and remove the item here. -->
+
+*(no pending items)*
+
+---
+
+## Work records
+
+---
+Task ID: 1
+Agent: main
+Task: Set up Vitest and create game state store with Zustand
+
+Work Log:
+- Installed vitest@4.1.4 as dev dependency
+- Created vitest.config.ts with @/ alias and node environment
+- Added `test` and `test:watch` scripts to package.json
+- Created vitest.setup.test.ts (2 smoke tests)
+- Installed zustand@5
+- Created src/lib/game-store.ts with Resources, Blacksmith, ForgeTask types and full store
+- Created src/lib/format.ts with formatNumber / formatPercent utilities
+- Created src/lib/game-store.test.ts (19 tests: resources, blacksmith, forge, reset)
+- Created src/lib/format.test.ts (8 tests: number and percent formatting)
+- All 29 tests passing
+
+Stage Summary:
+- Vitest configured and green (npm test → 29/29 pass)
+- Game store: gold/mana earn/spend, XP + level-up with title progression, forge start/complete
+- Format helpers ready for UI consumption
