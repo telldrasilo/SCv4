@@ -1,16 +1,32 @@
-# Worklog — SwordCraft Idle Forge
+# Worklog — SwordCraft module kit (SCv4)
 
-This file is the single source of truth for **what is happening now**.
-Agents **must** read this before starting any task and **must** append a record when a task is finished.
+**Read this file before any task.** It mixes **non-negotiable boundaries** (module-kit rules) with **short session state** (to-do + latest work record).
+
+For the full process (doc pack, GitHub Template workflow, merge checklist), use the SwordCraft monorepo spec **`docs/specs/module-development-kit.md`** when available, or the doc pack under **`docs/module/<your-slug>/`** in your repo.
 
 ---
 
-## What belongs here
+## Module kit — must follow
 
-- **Only the current to-do** and short working notes.
-- **Only the latest work record** stays in the `Work records` section below. All older records are moved to **`archive/`** (numbered filenames: `01-topic.md`, `02-topic.md`, …).
-- When a new task is completed: archive the **previous** work record to `archive/`, then write the **new** record here.
-- Keep **worklog** small; long specs live in other project docs (`README.md`, `BOILERPLATE.md`, …) or under `archive/`.
+Use this section as a **checklist**; do not rely on memory from chat.
+
+| Rule | Detail |
+|------|--------|
+| **Layout** | New feature code follows **`examples/reference-module/`** (or the path your `README` names). Do not invent new top-level folders without a one-line note in `docs/module/<slug>/00-index.md`. |
+| **Docs** | Domain specs for a **product module** live in **`docs/module/<slug>/`** (`00-index` … `08-delivery-manifest`). This `worklog.md` is **not** the module spec. |
+| **DAG** | A feature module **must not** import the **Craft Planner** (or other “consumer” hosts). Integration is composed in the **host** / shell. |
+| **Data** | One **single writer** per catalog or rule set (see `06-data-authority.md` in your doc pack). No copy-paste duplicates across modules. |
+| **API** | Stable exports only through the module **entry** (`index.ts` / agreed public file). Deep paths are not a public contract. |
+| **Delivery** | No handoffs that bundle `.git` from other projects, random `skills/`, or full monorepo trees — see `08-delivery-manifest.md`. |
+| **Secrets** | Never commit **`.env`** with real secrets. Only **`.env.example`**. |
+
+---
+
+## What belongs in the sections below
+
+- **To-do:** only the **current** task (keep short).
+- **Work records:** only the **latest** completed task. Older records go to **`archive/`** (`01-topic.md`, `02-topic.md`, …).
+- Long write-ups belong in **`docs/`**, not here.
 
 ---
 
@@ -22,7 +38,7 @@ Agents **must** read this before starting any task and **must** append a record 
 | Theme | Dark medieval (`theme-root.css`, `globals.css`) |
 | Layout | `SkinShell` component (sidebar, statusbar, forge, dock) |
 | State mgmt | Zustand 5 (`src/lib/game-store.ts`) — resources, blacksmith, forge |
-| Tests | Vitest 4 — 29 tests passing (`npm test`) |
+| Tests | Vitest 4 — run `npm test` |
 | Dev port | 3000 |
 
 ---
@@ -31,39 +47,38 @@ Agents **must** read this before starting any task and **must** append a record 
 
 ### Layout and files
 
-- Follow this layout: **`app/`** (routes, layout, globals), **`components/`** (shell and UI), **`src/`** (theme, CSS, `experiments/`), **`public/`** (static assets).
-- **Split large components**: extract pieces into their own modules under `components/` or into focused routes under `app/`.
-- **Reusable helpers** (formatting, small pure functions) live in dedicated files (e.g. under `src/` or a local `lib/` if you add one); avoid copy-paste.
+- Follow: **`app/`** (routes, layout, globals), **`components/`** (shell and UI), **`src/`** (theme, CSS, `experiments/`), **`public/`** (static assets).
+- **Split large components** into focused files under `components/` or `app/`.
+- **Reusable helpers** — small pure modules under `src/` or a dedicated `lib/`; avoid copy-paste.
 
 ### Documentation
 
-- Update project markdown when behavior or setup changes.
-- Do not use this file as a full spec; put details in the right doc.
+- When behavior or setup changes, update the **right** markdown (`README`, boilerplate notes, or **`docs/module/...`**).
+- Do not use this file as a full specification.
 
-### Language
+### Language (SwordCraft-aligned)
 
-- **Code comments** — **English**.
-- **Markdown you add or substantially edit** in this project — **English**, unless a file is intentionally kept in another language.
-- **Symbols, file names, commit messages** — clear, usually English.
+- **Code comments and maintainer docs** — **English**.
+- **Player-visible UI strings** (labels, buttons, in-game copy) — **Russian** when building features intended for the SwordCraft game shell.
+- **This repo’s** project markdown (README, worklog, technical notes) — **English**, unless a file is intentionally bilingual/RU for team review only.
 
 ### Technical debt and risk
 
-- Prefer **small steps** that keep local dev and production build green.
-- Mark **temporary or prototype-only** choices in code or docs so they are easy to revisit.
+- Prefer **small steps**; keep `npm run typecheck`, `npm test`, and `npm run build` green.
+- Mark **temporary** choices in code or docs so they are easy to revisit.
 
 ### Tests
 
-- Prefer **small, testable helpers** for non-trivial logic. When you add automated tests, use **Vitest** and colocate **`*.test.ts`** next to the module, consistent with how you set up this project.
+- Non-trivial logic → testable helpers + **Vitest** **`*.test.ts`** next to the module.
 
 ---
 
 ## Agent protocol
 
-Every agent (main or sub) working on this project **must**:
+Every agent **must**:
 
-1. **Read** this file before starting.
-2. **Append** a work record when a task is finished.
-3. **Before appending**, move the previous work record to `archive/` (next numbered filename). The `Work records` section must always contain **only the latest** completed task.
+1. **Read** this file (including **Module kit — must follow**) before starting.
+2. On task completion: move the **previous** work record to `archive/` (next free number), then add the **new** record under **Work records** (only one).
 
 Record format:
 
@@ -85,13 +100,15 @@ Stage Summary:
 
 ## To-do
 
-<!-- On completion: add archive/NN-topic.md and remove the item here. -->
+<!-- On completion: add archive/NN-topic.md and trim this section. -->
 
 *(no pending items)*
 
 ---
 
 ## Work records
+
+<!-- If this repo was created from the template for a NEW module, archive the example below and start fresh. -->
 
 ---
 Task ID: 1
@@ -102,7 +119,7 @@ Work Log:
 - Installed vitest@4.1.4 as dev dependency
 - Created vitest.config.ts with @/ alias and node environment
 - Added `test` and `test:watch` scripts to package.json
-- Created vitest.setup.test.ts (2 smoke tests)
+- Added vitest.setup.test.ts (2 smoke tests)
 - Installed zustand@5
 - Created src/lib/game-store.ts with Resources, Blacksmith, ForgeTask types and full store
 - Created src/lib/format.ts with formatNumber / formatPercent utilities
@@ -111,6 +128,6 @@ Work Log:
 - All 29 tests passing
 
 Stage Summary:
-- Vitest configured and green (npm test → 29/29 pass)
+- Vitest configured and green (`npm test` → 29/29 pass)
 - Game store: gold/mana earn/spend, XP + level-up with title progression, forge start/complete
 - Format helpers ready for UI consumption
